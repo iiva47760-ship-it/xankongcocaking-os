@@ -1,11 +1,5 @@
-[phases.setup]
-nixPkgs = ["nodejs_20"]
-
 [phases.install]
-cmds = ["npm install"]
-
-[phases.build]
-cmds = ["npm run build"]
+cmds = ["npm install --legacy-peer-deps"]
 
 [start]
-cmd = "node --experimental-strip-types server.ts"
+cmd = "node server.js"
