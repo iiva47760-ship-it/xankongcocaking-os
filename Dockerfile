@@ -1,18 +1,10 @@
-FROM node:20-alpine AS builder
+FROM node:20-alpine
 WORKDIR /app
 COPY package.json ./
-RUN npm install
+RUN npm install --legacy-peer-deps
 COPY . .
 RUN npm run build
-
-FROM node:20-alpine AS runner
-WORKDIR /app
-COPY package.json ./
-RUN npm install --omit=dev
-COPY --from=builder /app/dist ./dist
-COPY server.ts database.ts tsconfig.json ./
-RUN mkdir -p /data
 ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE 3000
-CMD ["node", "--experimental-strip-types", "server.ts"]
+CMD ["node", "server.js"]
