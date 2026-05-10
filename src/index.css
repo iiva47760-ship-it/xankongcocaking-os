@@ -1,8 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: monospace; background: #030305; color: #00ff9d; }
+body { font-family: 'Courier New', monospace; background: #030305; color: #00ff9d; }
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-thumb { background: rgba(0,255,157,0.3); }
