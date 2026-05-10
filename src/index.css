@@ -1,31 +1,8 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Courier New', Courier, monospace;
-  background: #030305;
-  color: #00ff9d;
-  overflow-x: hidden;
-}
-
-::-webkit-scrollbar {
-  width: 4px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 255, 157, 0.3);
-  border-radius: 2px;
-}
-
-.scrollbar-thin::-webkit-scrollbar {
-  width: 4px;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: monospace; background: #030305; color: #00ff9d; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: rgba(0,255,157,0.3); }
