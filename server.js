@@ -1,5 +1,4 @@
 import express from 'express'
-import { createServer } from 'http'
 import { fileURLToPath } from 'url'
 import path from 'path'
 
@@ -83,15 +82,14 @@ nav{flex:1;padding:8px}
     <p class="owner">Дмитрий Коваль Николаевич</p>
   </div>
 </div>
-
 <div class="app" id="app">
   <div class="sidebar">
     <div class="logo"><span>⚡</span><span>XKC OS v2.5</span></div>
     <nav>
-      <button class="nav-btn active" onclick="showSection('dashboard')">DASHBOARD</button>
-      <button class="nav-btn" onclick="showSection('terminal')">TERMINAL</button>
-      <button class="nav-btn" onclick="showSection('crypto')">CRYPTO/TON</button>
-      <button class="nav-btn" onclick="showSection('settings')">SETTINGS</button>
+      <button class="nav-btn active" onclick="showSection('dashboard',this)">DASHBOARD</button>
+      <button class="nav-btn" onclick="showSection('terminal',this)">TERMINAL</button>
+      <button class="nav-btn" onclick="showSection('crypto',this)">CRYPTO/TON</button>
+      <button class="nav-btn" onclick="showSection('settings',this)">SETTINGS</button>
     </nav>
   </div>
   <div class="main">
@@ -102,10 +100,9 @@ nav{flex:1;padding:8px}
       </div>
       <span id="priceDisplay" style="font-size:11px;opacity:0.6"></span>
     </div>
-
     <div class="section active" id="dashboard">
       <div class="grid3">
-        <div class="card"><p class="stat-label">TON PRICE</p><p class="stat-val" id="tonPrice" style="color:#00ff9d">--</p></div>
+        <div class="card"><p class="stat-label">TON PRICE</p><p class="stat-val" id="tonPrice">--</p></div>
         <div class="card"><p class="stat-label">SYSTEM</p><p class="stat-val" style="color:#4ade80">Online</p></div>
         <div class="card"><p class="stat-label">VERSION</p><p class="stat-val" style="color:#60a5fa">v2.5.0</p></div>
       </div>
@@ -118,7 +115,6 @@ nav{flex:1;padding:8px}
         </div>
       </div>
     </div>
-
     <div class="section" id="terminal">
       <div class="terminal">
         <div class="term-header">XKC-OS TERMINAL · v2.5</div>
@@ -132,7 +128,6 @@ nav{flex:1;padding:8px}
         </div>
       </div>
     </div>
-
     <div class="section" id="crypto">
       <div class="card">
         <p class="stat-label">TON / USDT LIVE PRICE</p>
@@ -143,7 +138,6 @@ nav{flex:1;padding:8px}
         <p style="font-size:11px;opacity:0.4">TON Connect integration available in full version.</p>
       </div>
     </div>
-
     <div class="section" id="settings">
       <div class="card">
         <p style="font-size:12px;font-weight:700;margin-bottom:16px;opacity:0.6;letter-spacing:0.1em">OWNER PROFILE</p>
@@ -155,16 +149,14 @@ nav{flex:1;padding:8px}
         </div>
       </div>
       <div class="card">
-        <p style="font-size:12px;opacity:0.6">XANKONGCOCAKING OS v2.5 · React 18 · TypeScript · Express · Socket.io</p>
+        <p style="font-size:12px;opacity:0.6">XANKONGCOCAKING OS v2.5 · Express · Node.js</p>
         <p style="font-size:12px;opacity:0.4;margin-top:8px">Build: March 2026 · Status: ✅ Online</p>
       </div>
     </div>
   </div>
 </div>
-
 <script>
 let tonPrice = null;
-
 function authenticate() {
   const code = document.getElementById('codeInput').value;
   if (code === 'XKC-777-REALTIME') {
@@ -177,19 +169,14 @@ function authenticate() {
     alert('Invalid master code');
   }
 }
-
-document.getElementById('codeInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') authenticate();
-});
-
-function showSection(id) {
+document.getElementById('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') authenticate(); });
+function showSection(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.getElementById('sectionTitle').textContent = id.toUpperCase();
-  event.target.classList.add('active');
+  if (btn) btn.classList.add('active');
 }
-
 function addLine(text, isCmd) {
   const out = document.getElementById('termOut');
   const div = document.createElement('div');
@@ -198,13 +185,12 @@ function addLine(text, isCmd) {
   out.appendChild(div);
   out.scrollTop = out.scrollHeight;
 }
-
 function execCmd() {
   const input = document.getElementById('termIn');
   const cmd = input.value.trim().toLowerCase();
   if (!cmd) return;
   addLine('> ' + cmd, true);
-  if (cmd === 'clear') { document.getElementById('termOut').innerHTML = '<div class="term-line">XANKONGCOCAKING OS v2.5</div><div class="term-line">Ready.</div>'; }
+  if (cmd === 'clear') { document.getElementById('termOut').innerHTML = '<div class="term-line">Ready.</div>'; }
   else if (cmd === 'status') addLine('System: Online | TON: ' + (tonPrice ? '$' + tonPrice.toFixed(2) : 'Loading'));
   else if (cmd === 'help') addLine('Commands: clear, status, help, history');
   else if (cmd === 'history') {
@@ -214,15 +200,10 @@ function execCmd() {
   fetch('/api/history', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})}).catch(()=>{});
   input.value = '';
 }
-
 function runCmd(cmd) {
-  showSection('terminal');
-  setTimeout(() => {
-    document.getElementById('termIn').value = cmd;
-    execCmd();
-  }, 100);
+  showSection('terminal', document.querySelectorAll('.nav-btn')[1]);
+  setTimeout(() => { document.getElementById('termIn').value = cmd; execCmd(); }, 100);
 }
-
 function fetchPrice() {
   fetch('https://api.binance.com/api/v3/ticker/price?symbol=TONUSDT')
     .then(r=>r.json()).then(d=>{
@@ -237,18 +218,11 @@ function fetchPrice() {
 </body>
 </html>`
 
-app.get('/', (req, res) => {
-  res.setHeader('Content-Type', 'text/html')
-  res.send(HTML)
-})
-
+app.get('/', (req, res) => { res.setHeader('Content-Type', 'text/html'); res.send(HTML) })
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Not found' })
-  res.setHeader('Content-Type', 'text/html')
-  res.send(HTML)
+  res.setHeader('Content-Type', 'text/html'); res.send(HTML)
 })
 
 const PORT = parseInt(process.env.PORT || '3000')
-app.listen(PORT, '0.0.0.0', () => {
-  console.log('XANKONGCOCAKING OS v2.5 on port ' + PORT)
-})
+app.listen(PORT, '0.0.0.0', () => { console.log('XANKONGCOCAKING OS v2.5 on port ' + PORT) })
